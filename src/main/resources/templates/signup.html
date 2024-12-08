@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Signup</title>
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and Gradient Background */
+        body, html {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+            overflow: hidden;
+            color: #333;
+            position: relative;
+        }
+
+        /* Water Droplets Background Effect */
+        .droplet {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: moveDroplet 8s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        /* Keyframes for Droplet Movement */
+        @keyframes moveDroplet {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(15px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Form Styling */
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1;
+            animation: popIn 1s ease-out;
+        }
+
+        /* Form Pop-In Animation */
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 1em;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #555;
+            margin: 10px 0;
+            display: block;
+            text-align: left;
+        }
+
+        input[type="email"], input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #82c7eb;
+            box-shadow: 0 0 5px rgba(130, 199, 235, 0.4);
+        }
+
+        button {
+            background-color: #82c7eb;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            box-shadow: 0 5px 15px rgba(130, 199, 235, 0.5);
+        }
+
+        button:hover {
+            background-color: #5da7d1;
+            transform: translateY(-2px);
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        /* Link Styling */
+        a {
+            color: #5da7d1;
+            text-decoration: none;
+            margin: 10px;
+            font-size: 0.9em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Water Droplets Background Effect -->
+    <script>
+        const createDroplets = () => {
+            const numDroplets = 15;
+            for (let i = 0; i < numDroplets; i++) {
+                const droplet = document.createElement("div");
+                droplet.classList.add("droplet");
+                droplet.style.width = `${5 + Math.random() * 20}px`;
+                droplet.style.height = droplet.style.width;
+                droplet.style.left = `${Math.random() * 100}vw`;
+                droplet.style.top = `${Math.random() * 100}vh`;
+                droplet.style.animationDuration = `${5 + Math.random() * 5}s`;
+                document.body.appendChild(droplet);
+            }
+        };
+        createDroplets();
+    </script>
+
+    <form action="#" th:action="@{/signup}" method="post">
+        <h2>Signup</h2>
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Sign Up</button>
+
+        <!-- Error message container -->
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+
+        <a href="/login">Login</a>
+        <a href="/">Home</a>
+    </form>
+</body>
+</html>

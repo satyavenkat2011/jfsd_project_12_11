@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Explore Few Of Our Themes</title>
+</head>
+<body>
+    <h1>Explore Few Of Our Themes</h1>
+
+    <!-- Check if themes are available -->
+    <div th:if="${themes.size() > 0}">
+        <ul>
+            <!-- Iterate over themes and display them -->
+            <li th:each="theme : ${themes}">
+                <h3 th:text="${theme.name}">Theme Name</h3>
+                <img th:src="${theme.imageUrl}" alt="Theme Image" style="width:200px; height:200px; object-fit:cover;">
+            </li>
+        </ul>
+    </div>
+
+    <!-- Fallback if no themes are available -->
+    <div th:if="${themes.size() == 0}">
+        <p>No themes available</p>
+    </div>
+</body>
+</html>

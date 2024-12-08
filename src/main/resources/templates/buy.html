@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/head :: head"></head>
+
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="images/hero-bg.jpg" alt="Hero Background">
+    </div>
+    <header th:replace="/fragments/header :: header"></header>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <section class="search_section">
+    <div class="container">
+      <div class="search_container">
+        <input type="text" id="searchInput" placeholder="Search for products..." onkeyup="filterProducts()">
+        
+        <!-- Dropdown for Room Selection -->
+        <select id="roomFilter" onchange="filterProducts()">
+          <option value="all">All Rooms</option>
+          <option value="livingroom">Living Room</option>
+          <option value="diningroom">Dining Room</option>
+          <option value="bedroom">Bedroom</option>
+          <option value="office">Office</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products_section layout_padding" style="color: white;">
+    <div class="container">
+      <div class="heading_container">
+        <h2>Featured Products for Purchase</h2>
+        <p>Explore our exquisite collection of furniture that combines style and comfort.</p>
+      </div>
+      <div class="row" id="productList">
+        
+        <!-- Product 1: Living Room Sofa -->
+        <div class="col-md-4 product_box" data-room="livingroom">
+          <img src="images/furniture1.jpg" alt="Luxury Sofa" class="product_image">
+          <h3>Luxury Sofa</h3>
+          <p class="price">Price: ₹14,000</p>
+          <button class="btn" onclick="openModelViewer('models/luxury_sofa.glb', 'Luxury Sofa', 'A comfortable and luxurious sofa.', '₹14,000')">View Details</button>
+        </div>
+
+        <!-- Product 2: Dining Room Table -->
+        <div class="col-md-4 product_box" data-room="diningroom">
+          <img src="images/furniture2.png" alt="Elegant Dining Table" class="product_image">
+          <h3>Elegant Dining Table</h3>
+          <p class="price">Price: ₹5,999</p>
+          <button class="btn" onclick="openModelViewer('models/dining_table.glb', 'Elegant Dining Table', 'A stylish dining table for a modern dining experience.', '₹5,999')">View Details</button>
+        </div>
+
+        <!-- Product 3: Living Room Coffee Table -->
+        <div class="col-md-4 product_box" data-room="livingroom">
+          <img src="images/furniture3.png" alt="Stylish Coffee Table" class="product_image">
+          <h3>Stylish Coffee Table</h3>
+          <p class="price">Price: ₹2,999</p>
+          <button class="btn" onclick="openModelViewer('models/coffee_table.glb', 'Stylish Coffee Table', 'A modern coffee table to complement your living space.', '₹2,999')">View Details</button>
+        </div>
+          <br>
+          <br>
+        <!-- Product 4: Bedroom Bookshelf -->
+        <div class="col-md-4 product_box" data-room="bedroom">
+          <img src="images/furniture4.jpg" alt="Modern Bookshelf" class="product_image">
+          <h3>Modern Bookshelf</h3>
+          <p class="price">Price: ₹3,500</p>
+          <button class="btn" onclick="openModelViewer('models/bookshelf.glb', 'Modern Bookshelf', 'A sleek and spacious bookshelf for your home.', '₹3,500')">View Details</button>
+        </div>
+
+        <!-- Product 5: Bedroom Armchair -->
+        <div class="col-md-4 product_box" data-room="bedroom">
+          <img src="images/furniture5.jpg" alt="Comfortable Armchair" class="product_image">
+          <h3>Comfortable Armchair</h3>
+          <p class="price">Price: ₹1,500</p>
+          <button class="btn" onclick="openModelViewer('models/armchair.glb', 'Comfortable Armchair', 'A cozy armchair perfect for relaxing.', '₹1,500')">View Details</button>
+        </div>
+
+        <!-- Product 6: Office Desk -->
+        <div class="col-md-4 product_box" data-room="office">
+          <img src="images/furniture6.jpg" alt="Stylish Desk" class="product_image">
+          <h3>Stylish Desk</h3>
+          <p class="price">Price: ₹1,400</p>
+          <button class="btn" onclick="openModelViewer('models/desk.glb', 'Stylish Desk', 'A modern desk for your home office.', '₹1,400')">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal for 3D Model Viewer -->
+  <div id="modelViewerModal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModelViewer()">&times;</span>
+      <div class="product-details">
+        <h2 id="productName"></h2>
+        <p id="productDescription"></p>
+        <p class="price" id="productPrice"></p>
+      </div>
+      <model-viewer id="modelViewer" src="" alt="A 3D model of the product" camera-controls auto-rotate></model-viewer>
+    </div>
+  </div>
+
+  <footer th:replace="/fragments/footer :: footer"></footer>
+
+  <!-- Script for Search and Filter -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script>
+    function openModelViewer(modelSrc, productName, productDescription, productPrice) {
+      document.getElementById('productName').textContent = productName;
+      document.getElementById('productDescription').textContent = productDescription;
+      document.getElementById('productPrice').textContent = productPrice;
+      document.getElementById('modelViewer').setAttribute('src', modelSrc);
+      document.getElementById('modelViewerModal').style.display = 'block';
+    }
+
+    function closeModelViewer() {
+      document.getElementById('modelViewerModal').style.display = 'none';
+    }
+
+    function filterProducts() {
+  const searchInput = document.getElementById('searchInput').value.toLowerCase();
+  const roomFilter = document.getElementById('roomFilter').value;
+  const products = document.getElementsByClassName('product_box');
+  
+  for (let product of products) {
+    const title = product.getElementsByTagName('h3')[0].textContent.toLowerCase();
+    const rooms = product.getAttribute('data-room').split(' ');
+
+    // Check if the product matches the search and room filter
+    if ((title.includes(searchInput) || searchInput === '') &&
+        (rooms.includes(roomFilter) || roomFilter === 'all')) {
+      product.style.display = 'block';
+    } else {
+      product.style.display = 'none';
+    }
+  }
+}
+
+  </script>
+
+<style>
+  /* Existing Styling */
+
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    color: #f4f4f4;
+  }
+
+  .products_section {
+    padding: 40px 0;
+    background-color: #444;
+  }
+  
+  .heading_container h2 {
+    font-size: 2.5rem;
+    color: #f4f4f4;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Spacing between items */
+    justify-content: center;
+}
+
+.product_box {
+    background: #555;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 15px 0;
+    flex: 1 1 calc(33.33% - 30px);
+    box-sizing: border-box;
+}
+
+
+
+
+  .product_image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  .price {
+    font-size: 1.2rem;
+    color: #ffd700;
+    margin: 10px 0;
+  }
+
+  .btn {
+    background-color: #2c2f33;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #444;
+  }
+
+  /* Modal Background Styling */
+#modelViewerModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); /* Darker background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  z-index: 9999;
+  overflow-y: auto; /* Allows the modal to scroll if content is too long */
+}
+
+/* Modal Content Styling */
+.modal-content {
+  background-color: #333; /* Darker modal background */
+  padding: 40px;  /* Added padding for a more spacious look */
+  border-radius: 15px; /* Rounded corners */
+  max-width: 900px; /* Maximum width */
+  width: 90%; /* Responsive width */
+  color: #fff; /* White text */
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items in the modal */
+  position: relative;
+  margin: auto; /* Center content in the modal */
+}
+
+/* Close Button Styling */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  background-color: #444;
+  padding: 10px 15px;
+  border-radius: 50%; /* Circular close button */
+  transition: background-color 0.3s;
+}
+
+.close:hover {
+  background-color: #ff5a5a; /* Red hover effect */
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  #productTitle {
+    font-size: 1.8rem;
+  }
+
+  #productDescription {
+    font-size: 1rem;
+  }
+
+  model-viewer {
+    height: 300px;
+  }
+}
+
+/* Product Price */
+.price {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #ffd700; /* Gold color for the price */
+  text-align: center;
+}
+
+
+/* 3D Viewer Styling */
+model-viewer {
+  width: 100%;
+  height: 400px;
+  background-color: #eee;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+
+  /* Search and Filter Section */
+  .search_section {
+    padding: 20px 0;
+    background-color: #333;
+    text-align: center;
+  }
+
+  .search_container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .search_container input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #222;
+    color: #000000;
+  }
+
+  .search_container input::placeholder {
+    color: #aaa;
+  }
+
+ 
+  .search_container input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #444; /* Darker background */
+    color: #f4f4f4; /* Light text color */
+}
+
+#roomFilter {
+    display: inline-block !important; /* Ensures dropdown is visible */
+    background-color: #444;
+    color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #666; /* Subtle border */
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#roomFilter option {
+    color: black; /* Options will display with black text in the dropdown */
+}
+
+
+</style>
+
+</body>
+</html>
